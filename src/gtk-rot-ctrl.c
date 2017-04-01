@@ -510,15 +510,15 @@ static GtkWidget *create_target_widgets(GtkRotCtrl * ctrl)
     gtk_table_set_row_spacings(GTK_TABLE(table), 5);
 
     /* sat selector */
-    ctrl->SatSel = gtk_combo_box_new_text();
+    ctrl->SatSel = gtk_combo_box_text_new();
     n = g_slist_length(ctrl->sats);
 
     for (i = 0; i < n; i++)
     {
         sat = SAT(g_slist_nth_data(ctrl->sats, i));
         if (sat)
-            gtk_combo_box_append_text(GTK_COMBO_BOX(ctrl->SatSel),
-                                      sat->nickname);
+            gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ctrl->SatSel),
+                                           sat->nickname);
     }
     gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->SatSel), 0);
     gtk_widget_set_tooltip_text(ctrl->SatSel, _("Select target object"));
@@ -587,7 +587,7 @@ static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 0, 1);
 
-    ctrl->DevSel = gtk_combo_box_new_text();
+    ctrl->DevSel = gtk_combo_box_text_new();
     gtk_widget_set_tooltip_text(ctrl->DevSel,
                                 _("Select antenna rotator device"));
 
@@ -619,8 +619,8 @@ static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
             rotname = g_slist_nth_data(rots, i);
             if (rotname)
             {
-                gtk_combo_box_append_text(GTK_COMBO_BOX(ctrl->DevSel),
-                                          rotname);
+                gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT
+                                               (ctrl->DevSel), rotname);
                 g_free(rotname);
             }
         }
@@ -854,7 +854,8 @@ static void rot_selected_cb(GtkComboBox * box, gpointer data)
     }
 
     /* load new configuration */
-    ctrl->conf->name = gtk_combo_box_get_active_text(box);
+    ctrl->conf->name =
+        gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(box));
     if (rotor_conf_read(ctrl->conf))
     {
         sat_log_log(SAT_LOG_LEVEL_INFO,

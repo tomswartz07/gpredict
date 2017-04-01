@@ -604,14 +604,14 @@ static GtkWidget *create_target_widgets(GtkRigCtrl * ctrl)
     gtk_table_set_row_spacings(GTK_TABLE(table), 5);
 
     /* sat selector */
-    ctrl->SatSel = gtk_combo_box_new_text();
+    ctrl->SatSel = gtk_combo_box_text_new();
     n = g_slist_length(ctrl->sats);
     for (i = 0; i < n; i++)
     {
         sat = SAT(g_slist_nth_data(ctrl->sats, i));
         if (sat)
-            gtk_combo_box_append_text(GTK_COMBO_BOX(ctrl->SatSel),
-                                      sat->nickname);
+            gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ctrl->SatSel),
+                                           sat->nickname);
     }
 
     gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->SatSel), 0);
@@ -630,7 +630,7 @@ static GtkWidget *create_target_widgets(GtkRigCtrl * ctrl)
     g_signal_connect(track, "toggled", G_CALLBACK(track_toggle_cb), ctrl);
 
     /* Transponder selector, tune, and trsplock buttons */
-    ctrl->TrspSel = gtk_combo_box_new_text();
+    ctrl->TrspSel = gtk_combo_box_text_new();
     gtk_widget_set_tooltip_text(ctrl->TrspSel, _("Select a transponder"));
     load_trsp_list(ctrl);
     //gtk_combo_box_set_active (GTK_COMBO_BOX (ctrl->TrspSel), 0);
@@ -744,7 +744,7 @@ static GtkWidget *create_conf_widgets(GtkRigCtrl * ctrl)
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 0, 1);
 
-    ctrl->DevSel = gtk_combo_box_new_text();
+    ctrl->DevSel = gtk_combo_box_text_new();
     gtk_widget_set_tooltip_text(ctrl->DevSel,
                                 _("Select primary radio device."
                                   "This device will be used for downlink and "
@@ -779,8 +779,8 @@ static GtkWidget *create_conf_widgets(GtkRigCtrl * ctrl)
             rigname = g_slist_nth_data(rigs, i);
             if (rigname)
             {
-                gtk_combo_box_append_text(GTK_COMBO_BOX(ctrl->DevSel),
-                                          rigname);
+                gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT
+                                               (ctrl->DevSel), rigname);
                 g_free(rigname);
             }
         }
@@ -807,13 +807,14 @@ static GtkWidget *create_conf_widgets(GtkRigCtrl * ctrl)
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 1, 2);
 
-    ctrl->DevSel2 = gtk_combo_box_new_text();
+    ctrl->DevSel2 = gtk_combo_box_text_new();
     gtk_widget_set_tooltip_text(ctrl->DevSel2,
                                 _("Select secondary radio device\n"
                                   "This device will be used for uplink"));
 
     /* load config */
-    gtk_combo_box_append_text(GTK_COMBO_BOX(ctrl->DevSel2), _("None"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ctrl->DevSel2),
+                                   _("None"));
     gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->DevSel2), 0);
 
     dir = g_dir_open(dirname, 0, &error);
@@ -828,8 +829,8 @@ static GtkWidget *create_conf_widgets(GtkRigCtrl * ctrl)
                 vbuff = g_strsplit(filename, ".rig", 0);
                 if (is_rig_tx_capable(vbuff[0]))
                 {
-                    gtk_combo_box_append_text(GTK_COMBO_BOX(ctrl->DevSel2),
-                                              vbuff[0]);
+                    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT
+                                                   (ctrl->DevSel2), vbuff[0]);
                 }
                 g_strfreev(vbuff);
             }
@@ -1140,7 +1141,8 @@ static void primary_rig_selected_cb(GtkComboBox * box, gpointer data)
     }
 
     /* load new configuration */
-    ctrl->conf->name = gtk_combo_box_get_active_text(box);
+    ctrl->conf->name =
+        gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(box));
     if (radio_conf_read(ctrl->conf))
     {
         sat_log_log(SAT_LOG_LEVEL_INFO,
@@ -1217,8 +1219,10 @@ static void secondary_rig_selected_cb(GtkComboBox * box, gpointer data)
     }
 
     /* ensure that selected secondary rig is not the same as the primary */
-    name1 = gtk_combo_box_get_active_text(GTK_COMBO_BOX(ctrl->DevSel));
-    name2 = gtk_combo_box_get_active_text(GTK_COMBO_BOX(ctrl->DevSel2));
+    name1 =
+        gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(ctrl->DevSel));
+    name2 =
+        gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(ctrl->DevSel2));
     if (!g_strcmp0(name1, name2))
     {
         /* selected conf is the same as the primary one */
@@ -1249,7 +1253,8 @@ static void secondary_rig_selected_cb(GtkComboBox * box, gpointer data)
     }
 
     /* load new configuration */
-    ctrl->conf2->name = gtk_combo_box_get_active_text(box);
+    ctrl->conf2->name =
+        gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(box));
     if (radio_conf_read(ctrl->conf2))
     {
         sat_log_log(SAT_LOG_LEVEL_INFO,
@@ -2593,7 +2598,7 @@ static void load_trsp_list(GtkRigCtrl * ctrl)
         n = g_slist_length(ctrl->trsplist);
         for (i = 0; i < n; i++)
         {
-            gtk_combo_box_remove_text(GTK_COMBO_BOX(ctrl->TrspSel), 0);
+            gtk_combo_box_text_remove(GTK_COMBO_BOX_TEXT(ctrl->TrspSel), 0);
         }
 
         /* clear transponder list */
@@ -2628,7 +2633,8 @@ static void load_trsp_list(GtkRigCtrl * ctrl)
     for (i = 0; i < n; i++)
     {
         trsp = (trsp_t *) g_slist_nth_data(ctrl->trsplist, i);
-        gtk_combo_box_append_text(GTK_COMBO_BOX(ctrl->TrspSel), trsp->name);
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ctrl->TrspSel),
+                                       trsp->name);
 
         sat_log_log(SAT_LOG_LEVEL_DEBUG,
                     _("%s:%s: Read transponder '%s' for satellite %d"),
