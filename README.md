@@ -1,3 +1,4 @@
+# Gpredict
 
 Gpredict is a real time satellite tracking and orbit prediction program
 for the Linux desktop. It uses the SGP4/SDP4 propagation algorithms together
@@ -39,32 +40,40 @@ If you compile Gpredict from source you will also need the development packages
 often with -dev or -devel in the package name, e.g. libgtk-3-dev. On Debian and
 Ubuntu systems you can install the build dependencies using:
 
-  sudo apt install libtool intltool autoconf automake libcurl4-openssl-dev
-  sudo apt install pkg-config libglib2.0-dev libgtk-3-dev libgoocanvas-2.0-dev
+```sh
+sudo apt install libtool intltool autoconf automake libcurl4-openssl-dev
+sudo apt install pkg-config libglib2.0-dev libgtk-3-dev libgoocanvas-2.0-dev
+```
 
 
 To build and install gpredict from source, first unpack the source package:
 
-  tar -xvf gpredict-x.y.z.tar.gz
+```sh
+tar -xvf gpredict-x.y.z.tar.gz
+```
 
 Then change to the gpredict-x.y.z directory and build gpredict:
 
-  ./configure
-  make
-  make install
+```sh
+./configure
+make
+make install
+```
 
 The last step usually requires you to become root, otherwise you may not have
 the required permissions to install gpredict. If you can not or do not want to
 install gpredict as root, you can install gpredict into a custom directory by
-adding --prefix=somedir to the ./configure step. For example
+adding `--prefix=somedir` to the `./configure` step. For example
 
-  ./configure --prefix=/home/user/predict
+```sh
+./configure --prefix=/home/user/predict
+```
   
-will configure the build to install the files into /home/user/gpredict folder.
+will configure the build to install the files into `/home/user/gpredict` folder.
 
 If you are building directly from the git repository, you have to run
-./autogen.sh instead of of configure. You can pass the same options to the
-autogen.sh script as you would to the configure script.
+`./autogen.sh` instead of of configure. You can pass the same options to the
+`autogen.sh` script as you would to the configure script.
 
 If you want to know more about installation options refer to the INSTALL file
 (not for beginners).
@@ -92,10 +101,12 @@ Foundation: https://community.libre.space/c/gpredict
 Terms and conditions
 --------------------
 
+```
 Gpredict is released under the GNU General Public License and comes with
 NO WARRANTY whatsoever. If you have problems installing or using Gpredict,
 feel free to ask for support for example on the Gpredict forum hosted by
 the Libre Space Foundation https://community.libre.space/c/gpredict
+```
 
 
 Note that the development environment is being migrated from Sourceforge to
